@@ -1,2 +1,2 @@
 # Color-Space-Translator
-Converting colors from R (Red), G (Green), B (Blue) to H (Hue), S (Saturation), I (Intensity) and vice-versa.
+Converting colors from RGB (Red, Green, Blue) to HSI (Hue, Saturation, Intensity) and vice-versa.
