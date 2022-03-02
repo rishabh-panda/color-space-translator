@@ -19,27 +19,24 @@ def main():
 
         if st.button("Convert RGB parameters to HSI"):
 
-            numerator = ((1/2)*((R-G)+(R-B)))
-            denominator = (math.sqrt((math.pow((R-G),2))+((R-B)*(G-B))))
+            numerator = 0.5*((R-G)+(R-B))
+            denominator = math.sqrt((math.pow((R-G),2))+((R-B)*(G-B)))
 
-            if R==G==B:
-                #special case, theta converted to degrees
-                theta = (math.pi/2)*(180/math.pi)
-            else:
-                theta = (math.acos(numerator/denominator))*(180/math.pi)
+            #theta in terms of radians
+            theta = math.acos(numerator/denominator)
 
             #defining Hue (H)
             if B <= G:
                 H = theta
 
             if B > G:
-                H = (360 - theta)
+                H = (360-theta)
 
             #defining Saturation (S)
-            S = 1-(3*(min(R, G, B))/(R+G+B))
+            S = 1-(3*(min(R,G,B))/(R+G+B))
 
             #defining Intensity (I)
-            I = (1/3)*(R+G+B)
+            I = (R+G+B)/3
 
             H = "{:.3f}".format(H)
             S = "{:.3f}".format(S)
@@ -83,9 +80,9 @@ def main():
                 H = H*(math.pi/180)
                 H = H-(240*(math.pi/180))
 
-                G = I*(1 - S)
+                G = I*(1-S)
                 B = I*(1+(S*math.cos(H)/math.cos((math.pi/3)-H)))
-                R = 3*I - (G + B)
+                R = 3*I-(G+B)
 
             #linear normalization of RGB values to [0, 255] range
             new_max = 255
