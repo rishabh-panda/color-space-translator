@@ -1,16 +1,16 @@
 # Color Image Processing
 ---
 
-## **Color models, Color space**
+## **Color Models, Color Space**
 - A color model is a specification of a coordinate system within which each color is represented by a single point.
 - Hardware-oriented color models; e.g., color monitors and printers, ```RGB```, ```CMY``` (cyan, magenta, yellow), ```CMYK``` (+black)
 - Application-oriented color model; ```HSI``` (hue, saturation, intensity)
 ---
-## RGB color model
+## RGB Color Model
 - Each color appears in its primary spectral components of R, G, and B
 - Based on a Cartesian coordinate system (cube)
 ---
-### HSI color model
+## HSI Color Model
 - ```RGB``` and similar others are not practical for human interpretation.
 - **Hue:** a color attribute that describes a pure color.
 - **Saturation:** a measure of the degree to which a pure color is diluted by white light.
