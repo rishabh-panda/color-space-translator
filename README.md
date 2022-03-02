@@ -39,3 +39,8 @@ saturation, and intensity.
 **3. BR Sector (240 < H < 360):**
 ---
 ![BR-Sector](https://user-images.githubusercontent.com/80598737/156316989-04d50c76-ee01-48a6-9108-1deaf13f4d56.png)
+---
+---
+# Normalization
+![Normalization](https://user-images.githubusercontent.com/80598737/156334260-ea3b12d5-5a7a-4f7c-8328-8f841e7cdc19.png)
+
