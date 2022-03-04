@@ -19,32 +19,42 @@ def main():
 
         if st.button("Convert RGB parameters to HSI"):
 
-            numerator = 0.5*((R-G)+(R-B))
-            denominator = math.sqrt((math.pow((R-G),2))+((R-B)*(G-B)))
+            summation = R+G+B
+            r = R/summation
+            g = G/summation
+            b = B/summation
 
-            #theta in terms of radians
-            theta = math.acos(numerator/denominator)
+            if r == g == b:
+                h = 0
 
-            #defining Hue (H)
-            if B <= G:
-                H = theta
+            #numerator = 0.5*((r-g)+(r-b))
+            #denominator = math.sqrt((math.pow((r-g),2))+((r-b)*(g-b)))
 
-            if B > G:
-                H = (360-theta)
+            elif b <= g:
+                # h ranges from [0, pi]
+                h = math.acos((0.5*((r-g)+(r-b)))/(math.sqrt((math.pow((r-g),2))+((r-b)*(g-b)))))
 
-            #defining Saturation (S)
-            S = 1-(3*(min(R,G,B))/(R+G+B))
+            else:
+                # h ranges from [pi, 2pi]
+                h = (2*math.pi)-math.acos((0.5*((r-g)+(r-b)))/(math.sqrt((math.pow((r-g),2))+((r-b)*(g-b)))))
 
-            #defining Intensity (I)
+            # s ranges from [0, 1]
+            s = 1-(3*min(r,g,b))
+
+            # converting normalized h, s, i values to their standard ranges for convenience
+            # H - [0,360], S - [0,100], I - [0, 255]
+
+            H = h*(180/math.pi)
+            S = 100*s
             I = (R+G+B)/3
 
-            H = "{:.3f}".format(H)
-            S = "{:.3f}".format(S)
-            I = "{:.3f}".format(I)
+            H_final = "{:.3f}".format(H)
+            S_final = "{:.3f}".format(S)
+            I_final = "{:.3f}".format(I)
 
-            st.success(f"Hue (H) = {H}")
-            st.success(f"Saturation (S) = {S}")
-            st.success(f"Intensity (I) = {I}")
+            st.success(f"Hue (H) = {H_final}")
+            st.success(f"Saturation (S) = {S_final}")
+            st.success(f"Intensity (I) = {I_final}")
 
     else:
         st.subheader("HSI to RGB Conversion [ Hue range (0 - 360) degrees ]")
@@ -55,45 +65,37 @@ def main():
 
         if st.button("Convert HSI parameters to RGB"):
 
-            #RG sector (0 <= H < 120 degrees)
-            if (0 <= H) and (H < 120):
-                #degrees-radian transition
-                H = H*(math.pi/180)
+            h = H*(math.pi/180)
+            s = S/100
+            i = I/255
 
-                B = I*(1-S)
-                R = I*(1+(S*math.cos(H)/math.cos((math.pi/3)-H)))
-                G = 3*I-(R+B)
+            x = i*(1-s)
+            y = i*((s*math.cos(h))/(math.cos((math.pi/3)-h)))
+            z = 3*i-(x+y)
 
-            #GB sector (120 < H < 240 degrees)
-            if (120 <= H) and (H < 240):
-                # degrees-radian transition
-                H = H*(math.pi/180)
-                H = H-(120*(math.pi/180))
+            if h < (2*math.pi)/3:
+                b = x
+                r = y
+                g = z
 
-                R = I*(1-S)
-                G = I*(1+(S*math.cos(H)/math.cos((math.pi/3)-H)))
-                B = 3*I-(R+G)
+            if ((2*math.pi)/3) <= h < ((4*math.pi)/3):
+                h = h - (2*math.pi)/3
+                r = x
+                g = y
+                b = z
 
-            #BR sector (240 < H < 360 degrees)
-            if (240 <= H) and (H <= 360):
-                # degrees-radian transition
-                H = H*(math.pi/180)
-                H = H-(240*(math.pi/180))
+            if ((4*math.pi)/3) <= h < 2*math.pi:
+                h = h - (4*math.pi)/3
+                g = x
+                b = y
+                r = z
 
-                G = I*(1-S)
-                B = I*(1+(S*math.cos(H)/math.cos((math.pi/3)-H)))
-                R = 3*I-(G+B)
+            #The result r, g and b are normalized values, which are in the ranges of [0,1],
+            #therefore, they should be multiplied by 255 for displaying.
 
-            #linear normalization of RGB values to [0, 255] range
-            new_max = 255
-            new_min = 0
-            R_norm = ((R - min(R, G, B))*((new_max-new_min)/(max(R, G, B)-min(R, G, B))))+new_min
-            G_norm = ((G - min(R, G, B))*((new_max-new_min)/(max(R, G, B)-min(R, G, B))))+new_min
-            B_norm = ((B - min(R, G, B))*((new_max-new_min)/(max(R, G, B)-min(R, G, B))))+new_min
-
-            R = "{:.3f}".format(R_norm)
-            G = "{:.3f}".format(G_norm)
-            B = "{:.3f}".format(B_norm)
+            R = "{:.3f}".format(r*255)
+            G = "{:.3f}".format(g*255)
+            B = "{:.3f}".format(b*255)
 
             st.success(f"Red (R) = {R}")
             st.success(f"Green (G) = {G}")
